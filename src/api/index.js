@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const URL = "http://localhost:4000"
+const URL = "https://stoked-dominion-341004.ue.r.appspot.com"
 
 
 const instance = axios.create({
