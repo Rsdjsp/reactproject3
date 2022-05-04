@@ -101,10 +101,10 @@ export default function Navbar() {
         </LinkContainer>
       </Nav>
       <Category>
-        <Section to="/">Category 1</Section>
-        <Section to="/">Category 2</Section>
-        <Section to="/">Category 3</Section>
-        <Section to="/">Category 4</Section>
+        <Section to="/">Best Sellers</Section>
+        <Section to="/">Offers</Section>
+        <Section to="/">New Collection</Section>
+        <Section to="/">Liquidation</Section>
       </Category>
     </>
   );
