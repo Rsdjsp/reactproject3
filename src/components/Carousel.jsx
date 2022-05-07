@@ -1,31 +1,35 @@
-import React, { useState, useEffect, useRef } from "react";
-import { get } from "../api";
+import React, { useState, useEffect } from "react";
 import { MdArrowBackIosNew, MdArrowForwardIos } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 import styled from "styled-components";
+import { useSelector } from "react-redux";
 
 const Main = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 89%;
+  width: 95%;
   margin: auto;
   margin-bottom: 160px;
 `;
 
 const Container = styled.div`
-  width: fit-content;
+  width: 100%;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   grid-column-gap: 20px;
 `;
 
-const Product = styled.div`
+const Product = styled(Link)`
   width: 270px;
   height: fit-content;
   border: 2px solid #a6a6a67b;
   border-radius: 2%;
   background-color: #ffffff;
+  color: #363636;
+  text-decoration: none;
+  cursor: pointer;
   box-shadow: 0px 16px 16px 0px rgba(168, 168, 168, 0.38);
 
   & > img {
@@ -33,6 +37,9 @@ const Product = styled.div`
     height: 270px;
     object-fit: cover;
     margin-bottom: 0;
+    :hover {
+      object-fit: none;
+    }
   }
 
   & > h4,
@@ -47,6 +54,8 @@ const Arrow = styled.button`
   align-items: center;
   justify-content: center;
   text-align: center;
+  margin-left: 20px;
+  margin-right: 20px;
   padding: 0;
   border: none;
   background-color: transparent;
@@ -61,18 +70,20 @@ const Arrow = styled.button`
 `;
 
 export default function Carousel() {
-  const [bestSeller, setBestSeller] = useState([]);
+  const { carousel } = useSelector((state) => state.products);
+  const [bestSeller, setBestSeller] = useState(carousel);
   const [indexStart, setIndexStart] = useState(0);
   const [indexEnd, setIndexEnd] = useState(4);
 
   useEffect(() => {
-    get("/products?limit=20&page=1")
-      .then(({ data }) => setBestSeller(data.docs))
-      .catch((error) => console.log(error));
-  }, []);
+    setBestSeller(carousel);
+  }, [carousel]);
 
   const next = () => {
-    if (indexStart + 4 > bestSeller.length - 1) {
+    if (
+      indexStart + 4 > bestSeller.length - 1 ||
+      indexEnd > bestSeller.length - 3
+    ) {
       setIndexStart(0);
       setIndexEnd(4);
     } else {
@@ -102,7 +113,7 @@ export default function Carousel() {
             .slice(indexStart, indexEnd)
             .map(({ _id, img, name, price }) => {
               return (
-                <Product key={_id}>
+                <Product to={`/products/${_id}`} key={_id}>
                   <img src={img} alt="product" />
                   <h4>{name.slice(0, 28)}</h4>
                   <p> $ {price}</p>

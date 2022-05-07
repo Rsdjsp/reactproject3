@@ -6,6 +6,7 @@ import {
   AiOutlineShoppingCart,
   AiOutlineSearch,
 } from "react-icons/ai";
+import { useDispatch, useSelector } from "react-redux";
 
 const Nav = styled.nav`
   background-color: #ffffff;
@@ -17,6 +18,9 @@ const Nav = styled.nav`
   border-bottom: 2px solid #e7e6e6;
   height: 70px;
   max-height: 70px;
+  width: 100%;
+  position: fixed;
+  z-index: 20;
 `;
 
 const Category = styled.div`
@@ -27,6 +31,10 @@ const Category = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  position: fixed;
+  width: 100%;
+  margin-top: 72px;
+  z-index: 20;
 `;
 
 const Links = styled(Link)`
@@ -79,6 +87,8 @@ const LinkContainer = styled.div`
 `;
 
 export default function Navbar() {
+  
+
   return (
     <>
       <Nav>
@@ -90,7 +100,7 @@ export default function Navbar() {
           <img src="https://i.imgur.com/XXx1F8H.png" alt="Logo" />
         </Links>
         <LinkContainer>
-          <Links to="/">
+          <Links to="/login">
             <AiOutlineUser />
             Sign In
           </Links>
@@ -101,10 +111,10 @@ export default function Navbar() {
         </LinkContainer>
       </Nav>
       <Category>
-        <Section to="/">Best Sellers</Section>
-        <Section to="/">Offers</Section>
-        <Section to="/">New Collection</Section>
-        <Section to="/">Liquidation</Section>
+        <Section to="/bestSellers">Best Sellers</Section>
+        <Section to="/offers">Offers</Section>
+        <Section to="/newCollection">New Collection</Section>
+        <Section to="/liquidation">Liquidation</Section>
       </Category>
     </>
   );

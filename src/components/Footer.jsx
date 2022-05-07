@@ -7,7 +7,8 @@ import {
 } from "react-icons/ai";
 
 const Offer = styled.div`
-  background-color: #83a1a2be;
+  background-color: #aad2d3b8;
+  width: 100%;
   height: 170px;
   display: flex;
   flex-direction: column;
@@ -58,7 +59,7 @@ const OfferForm = styled.form`
 
 const FooterText = styled.footer`
   height: 140px;
-  background-color: #a6a6a6;
+  background-color: #a6a6a68b;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   align-items: center;

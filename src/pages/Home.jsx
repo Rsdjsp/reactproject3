@@ -58,6 +58,7 @@ const Categories = styled.div`
   .div3,
   .div4 {
     height: 400px;
+    border: 1.5px solid #a6a6a6;
   }
 
   & > .div1,
@@ -124,7 +125,6 @@ const CategoryText = styled.article`
 
 const LinkButton = styled.button`
   outline: none;
-  font-family: "Libre Franklin", sans-serif;
   font-size: 16px;
   font-weight: bold;
   background: transparent;
