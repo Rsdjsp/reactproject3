@@ -10,15 +10,22 @@ import Payment from "./pages/Payment";
 import Category from "./pages/Category";
 import Products from "./pages/Products";
 import Login from "./pages/Login";
+import Cart from "./pages/Cart";
+import { userCart, validateUser } from "./features/userSlice";
 
 function App() {
   const dispatch = useDispatch();
   const { bestSellers, offers, newCollection, liquidation } = useSelector(
     (state) => state.products
   );
+  const { logged } = useSelector((state) => state.user);
   useEffect(() => {
+    dispatch(validateUser());
     dispatch(products());
-  }, [dispatch]);
+    if (logged) {
+      dispatch(userCart());
+    }
+  }, [dispatch, logged]);
 
   return (
     <BrowserRouter>
@@ -68,6 +75,7 @@ function App() {
         />
         <Route path="/products/:id" element={<Products />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/cart" element={<Cart />} />
       </Routes>
       <Footer />
     </BrowserRouter>

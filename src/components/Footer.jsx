@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import {
   AiOutlineGithub,
   AiFillLinkedin,
   AiOutlineTwitter,
 } from "react-icons/ai";
+import Modal from "./Modal";
+import { animateScroll as scroll } from "react-scroll";
 
 const Offer = styled.div`
   background-color: #aad2d3b8;
@@ -97,14 +99,34 @@ const Rights = styled.div`
 `;
 
 export default function Footer() {
+  const [modal, setModal] = useState(false);
+  const email = useRef();
+
+  const discount = (event) => {
+    setModal(true);
+    event.preventDefault();
+    email.current.value = "";
+    setTimeout(() => {
+      setModal(false);
+      scroll.scrollToTop();
+    }, 1500);
+  };
+
   return (
     <>
       <Offer>
+        {modal && <Modal message={"Thanks for subscribe !!!"} />}
         <Text>
-          Sign up for exclusive offers and get 10% off your first order
+          Suscribe for exclusive offers and get 10% off your first order
         </Text>
-        <OfferForm>
-          <input type="text" name="email" id="email" placeholder="email" />
+        <OfferForm onSubmit={discount}>
+          <input
+            ref={email}
+            type="email"
+            name="email"
+            id="email"
+            placeholder="email"
+          />
           <button>Submit</button>
         </OfferForm>
       </Offer>

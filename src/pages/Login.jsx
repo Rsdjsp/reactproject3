@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { FcGoogle } from "react-icons/fc";
+import { useDispatch } from "react-redux";
+import { loginUser, registerUser } from "../features/userSlice";
+import { useNavigate } from "react-router-dom";
+import Modal from "../components/Modal";
 
 const LoginForm = styled.div`
   width: 100%;
   max-height: 100vh;
-  max-height: fit-content;
   position: absolute;
   z-index: 10;
   background: linear-gradient(to right, #e9e9e9 50%, #f2f2f2 100%);
@@ -127,31 +130,84 @@ const LoginForm = styled.div`
 
 export default function Login() {
   const [login, setLogin] = useState(true);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [modal, setModal] = useState(false);
+
+  const signIn = (event) => {
+    event.preventDefault();
+    setModal(true);
+    if (!login) {
+      const {
+        email: { value: email },
+        password: { value: password },
+        firstname: { value: firstname },
+        lastname: { value: lastname },
+      } = event.target;
+      dispatch(registerUser({ firstname, lastname, email, password }));
+    } else {
+      const {
+        email: { value: email },
+        password: { value: password },
+      } = event.target;
+      dispatch(loginUser({ email, password }));
+    }
+    setTimeout(() => {
+      navigate("/");
+      setModal(false);
+    }, 1500);
+  };
+
   return (
-    <LoginForm>
-      <form>
-        <h1>{login ? "Login" : "Create an Account"}</h1>
-        {!login && <input type="text" placeholder="Firstname" />}
-        {!login && <input type="text" placeholder="Lastname" />}
-        <input type="text" placeholder="Email" />
-        <input type="text" placeholder="Password" />
-        {login && <p>FORGOT PASSWORD?</p>}
-        <button>{login ? "SIGN IN" : "SIGN UP"}</button>
-      </form>
-      {login && (
-        <div>
-          <h4>Or login with:</h4>
-          <button id="google">
-            <span>
-              <FcGoogle />
-            </span>
-            Log in with Google
-          </button>
-        </div>
-      )}
-      <button onClick={() => setLogin(!login)} id="account">
-              {login ? "Create Account" : "Login"}
-      </button>
-    </LoginForm>
+    <>
+      <LoginForm>
+        <form onSubmit={signIn}>
+          <h1>{login ? "Login" : "Create an Account"}</h1>
+          {!login && (
+            <input
+              type="text"
+              placeholder="Firstname"
+              name="firstname"
+              id="firstname"
+              required
+            />
+          )}
+          {!login && (
+            <input
+              type="text"
+              placeholder="Lastname"
+              name="lastname"
+              id="lastname"
+              required
+            />
+          )}
+          <input type="email" placeholder="Email" name="email" required />
+          <input
+            type="password"
+            placeholder="Password"
+            name="password"
+            id="password"
+            required
+          />
+          {login && <p>FORGOT PASSWORD?</p>}
+          <button>{login ? "SIGN IN" : "SIGN UP"}</button>
+        </form>
+        {login && (
+          <div>
+            <h4>Or login with:</h4>
+            <button id="google">
+              <span>
+                <FcGoogle />
+              </span>
+              Log in with Google
+            </button>
+          </div>
+        )}
+        <button onClick={() => setLogin(!login)} id="account">
+          {login ? "Create Account" : "Login"}
+        </button>
+      </LoginForm>
+      {modal && <Modal message={"Welcome !"} />}
+    </>
   );
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import {
@@ -7,10 +7,10 @@ import {
   AiOutlineSearch,
 } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
+import { logOutUser } from "../features/userSlice";
 
 const Nav = styled.nav`
   background-color: #ffffff;
-  color: #363636;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   justify-content: center;
@@ -20,7 +20,7 @@ const Nav = styled.nav`
   max-height: 70px;
   width: 100%;
   position: fixed;
-  z-index: 20;
+  z-index: 30;
 `;
 
 const Category = styled.div`
@@ -45,6 +45,7 @@ const Links = styled(Link)`
   display: flex;
   font-size: 18px;
   margin-left: 40px;
+
   :hover {
     text-decoration-line: underline;
     text-underline-offset: 4px;
@@ -59,7 +60,6 @@ const Section = styled(Links)`
 `;
 
 const Search = styled.div`
-  color: #363636;
   font-size: 22px;
   display: flex;
   margin-top: auto;
@@ -83,11 +83,56 @@ const LinkContainer = styled.div`
   margin-right: 70px;
   justify-content: end;
   align-items: center;
-  font-size: 16px;
+  cursor: default;
+
+  & > span {
+    font-size: 20px;
+  }
+
+  & > div {
+    position: relative;
+    & > p {
+      font-weight: 600;
+      padding-top: 2px;
+      cursor: pointer;
+      text-transform: capitalize;
+    }
+
+    & > section {
+      position: absolute;
+      border: 2px solid #a6a6a6;
+      border-radius: 5px;
+      width: 100%;
+      top: 75%;
+      height: 45px;
+      background-color: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      & > button {
+        background-color: transparent;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        :hover {
+          text-decoration-line: underline;
+          text-underline-offset: 4px;
+          color: #e4563c;
+        }
+      }
+    }
+  }
 `;
 
 export default function Navbar() {
-  
+  const dispatch = useDispatch();
+  const { name, logged } = useSelector((state) => state.user);
+  const [modal, setModal] = useState(false);
+
+  const signOut = () => {
+    dispatch(logOutUser());
+    setModal(false);
+  };
 
   return (
     <>
@@ -100,11 +145,28 @@ export default function Navbar() {
           <img src="https://i.imgur.com/XXx1F8H.png" alt="Logo" />
         </Links>
         <LinkContainer>
-          <Links to="/login">
-            <AiOutlineUser />
-            Sign In
-          </Links>
-          <Links to="/">
+          {logged && (
+            <span>
+              <AiOutlineUser />
+            </span>
+          )}
+          {logged ? (
+            <div
+              onMouseEnter={() => setModal(true)}
+              onMouseLeave={() => setModal(false)}
+            >
+              <p>{name}</p>
+              {modal && (
+                <section>
+                  <button onClick={signOut}>Logout</button>
+                </section>
+              )}
+            </div>
+          ) : (
+            <Links to="/login">Login</Links>
+          )}
+
+          <Links to="/cart">
             <AiOutlineShoppingCart />
             Cart
           </Links>

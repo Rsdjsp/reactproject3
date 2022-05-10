@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import { post } from "../api";
 import Carousel from "../components/Carousel";
+import { userCart } from "../features/userSlice";
 
 const Cover = styled.div`
   width: 100%;
@@ -144,11 +146,36 @@ const Products = () => {
   const { id } = useParams();
   const findProd = products.find((prod) => prod._id === id);
   const [product, setProduct] = useState(findProd);
+  const [amount, setAmount] = useState(1);
+  const { cart } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(userCart());
     setProduct(findProd);
-  }, [findProd]);
-  console.log(product);
+  }, [dispatch, findProd]);
+
+  const addProduct = (idProduct) => {
+    const verify = cart.products.find(
+      (product) => product.product._id === idProduct
+    );
+
+    if (verify !== undefined) {
+      const newAmount = parseInt(amount) + parseInt(verify.quantity);
+      post("/api/cart/update", {
+        amount: newAmount,
+        product: idProduct,
+      });
+      dispatch(userCart());
+    } else {
+      post("/api/cart", {
+        products: idProduct,
+        quantity: amount,
+      });
+    }
+  };
+
+  console.log(cart.products);
   return (
     <>
       {product && (
@@ -178,7 +205,7 @@ const Products = () => {
                 </p>
                 <div>
                   Amount:
-                  <select>
+                  <select onChange={(event) => setAmount(event.target.value)}>
                     <option value={1}>1</option>
                     <option value={2}>2</option>
                     <option value={3}>3</option>
@@ -191,7 +218,9 @@ const Products = () => {
                     <option value={10}>10</option>
                   </select>
                 </div>
-                <button>add to cart</button>
+                <button onClick={() => addProduct(product._id)}>
+                  add to cart
+                </button>
               </article>
             </Features>
           </Cover>

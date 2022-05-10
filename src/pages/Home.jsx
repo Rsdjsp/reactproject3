@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Carousel from "../components/Carousel";
 
@@ -9,9 +10,17 @@ const Cover = styled.div`
   align-items: center;
   width: 100%;
   height: 82vh;
+  margin-bottom: 150px;
+
+  & > img {
+    margin: auto;
+    max-width: 100%;
+    object-fit: cover;
+  }
 `;
 
 const Intro = styled.div`
+  padding-top: 190px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -190,21 +199,16 @@ const Gifts = styled.div`
       }
     }
   }
-
-  & > img {
-    margin: auto;
-    max-width: 100%;
-    object-fit: cover;
-  }
 `;
 
 export default function Home() {
+  const navigate = useNavigate();
   return (
     <>
       <Cover>
         <Intro>
           <h3>Save 20 % in your Second pruduct whit Your credit card</h3>
-          <button>shop now</button>
+          <button onClick={() => navigate("/bestSellers")}>shop now</button>
         </Intro>
         <img src="https://i.imgur.com/YVfZTT0.png" alt="promotion" />
       </Cover>
@@ -213,24 +217,30 @@ export default function Home() {
         <div className="div1">
           <CategoryText>
             <p>Best Sellers</p>
-            <LinkButton>Shop Now</LinkButton>
+            <LinkButton onClick={() => navigate("/bestSellers")}>
+              Shop Now
+            </LinkButton>
           </CategoryText>
           <img src="https://i.imgur.com/hxMs0Cf.png" alt="logo" />
         </div>
         <div className="div2">
           <img src="https://i.imgur.com/6fn1Ogd.png" alt="logo" />
-          <LinkButton>Offers</LinkButton>
+          <LinkButton onClick={() => navigate("/offers")}>Offers</LinkButton>
         </div>
         <div className="div3">
           <CategoryText>
             <p>New Collection</p>
-            <LinkButton>Shop Now</LinkButton>
+            <LinkButton onClick={() => navigate("/newCollection")}>
+              Shop Now
+            </LinkButton>
           </CategoryText>
           <img src="https://i.imgur.com/kr4hj71.png" alt="logo" />
         </div>
         <div className="div4">
           <img src="https://i.imgur.com/zT7Nav1.png" alt="logo" />
-          <LinkButton>Offers</LinkButton>
+          <LinkButton onClick={() => navigate("/liquidation")}>
+            Liquidation
+          </LinkButton>
         </div>
       </Categories>
       <Titles>Complement Your Purchase With a Gift Subscription</Titles>
@@ -238,7 +248,7 @@ export default function Home() {
         <div>
           <h3>Give the gifts they'll open every day.</h3>
           <p>Subscriptions to The Times. Starting at $25.</p>
-          <button>Give</button>
+          <button onClick={() => navigate("/login")}>Give</button>
         </div>
         <img src="https://i.imgur.com/OaDXEND.png" alt="logo" />
       </Gifts>

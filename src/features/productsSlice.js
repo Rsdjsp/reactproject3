@@ -18,12 +18,6 @@ const productsSlice = createSlice({
     newCollection: [],
     liquidation: [],
   },
-  reducers: {
-    bestSellers: (state, action) => {
-      const bestSellers = action.payload;
-      state.focusedProducts = bestSellers;
-    },
-  },
 
   extraReducers(builder) {
     builder
@@ -46,5 +40,4 @@ const productsSlice = createSlice({
 });
 
 const productsReducer = productsSlice.reducer;
-export const { bestSellers } = productsSlice.actions;
 export default productsReducer;
