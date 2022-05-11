@@ -32,7 +32,6 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/payment" element={<Payment />} />
         <Route
           path="/bestSellers"
           element={
@@ -76,6 +75,7 @@ function App() {
         <Route path="/products/:id" element={<Products />} />
         <Route path="/login" element={<Login />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/payments/:amount" element={<Payment />} />
       </Routes>
       <Footer />
     </BrowserRouter>

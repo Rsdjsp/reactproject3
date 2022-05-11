@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { post } from "../api";
 import Carousel from "../components/Carousel";
-import { userCart } from "../features/userSlice";
+import { pushProduct, userCart } from "../features/userSlice";
 
 const Cover = styled.div`
   width: 100%;
@@ -166,8 +166,8 @@ const Products = () => {
         amount: newAmount,
         product: idProduct,
       });
-      dispatch(userCart());
     } else {
+      dispatch(pushProduct({ product: findProd, amount: amount }));
       post("/api/cart", {
         products: idProduct,
         quantity: amount,
@@ -175,7 +175,6 @@ const Products = () => {
     }
   };
 
-  console.log(cart.products);
   return (
     <>
       {product && (

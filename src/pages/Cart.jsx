@@ -3,7 +3,8 @@ import styled from "styled-components";
 import { IoTrashOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { post } from "../api";
-import { userCart } from "../features/userSlice";
+import { pullProduct, userCart } from "../features/userSlice";
+import { useNavigate } from "react-router-dom";
 
 const CartContainer = styled.div`
   width: 100%;
@@ -33,6 +34,7 @@ const CartContainer = styled.div`
 
   & > div {
     height: fit-content;
+
     & > article {
       display: flexbox;
       align-items: center;
@@ -50,8 +52,10 @@ const CartContainer = styled.div`
         width: 200px;
         margin-left: 30px;
         text-align: center;
+        margin-right: 30px;
       }
       & > p {
+        padding-left: 20px;
         & > span {
           font-size: 22px;
           margin-left: 10px;
@@ -62,7 +66,7 @@ const CartContainer = styled.div`
         background-color: transparent;
         border: none;
         font-size: 22px;
-        margin-left: 20px;
+        margin-left: 100px;
         padding-top: 5px;
         cursor: pointer;
         :hover {
@@ -99,6 +103,7 @@ const CartContainer = styled.div`
       display: flex;
       flex-direction: column;
       align-items: flex-end;
+      margin-bottom: 150px;
       & > div {
         padding-bottom: 0;
         margin-bottom: 20px;
@@ -134,7 +139,11 @@ const CartContainer = styled.div`
 
 const Cart = () => {
   const { products } = useSelector((state) => state.user.cart);
+  const { logged } = useSelector((state) => state.user);
+
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+
   let total = 0;
   products &&
     products.forEach((element) => {
@@ -143,15 +152,25 @@ const Cart = () => {
         total = total + totalAmount;
       }
     });
-  console.log(products);
+
   useEffect(() => {
+  
     dispatch(userCart());
-  }, [dispatch]);
+  }, [dispatch, logged, navigate]);
 
   const removeProduct = (idProduct) => {
     post("/api/cart/delete", {
       product: idProduct,
     });
+    const productDel = products.find(
+      (product) => product.product._id === idProduct
+    );
+    const newCart = products.filter((product) => product !== productDel);
+    dispatch(pullProduct({ products: newCart }));
+  };
+
+  const checkOut = () => {
+    navigate(`/payments/${total}`);
   };
 
   return (
@@ -170,7 +189,7 @@ const Cart = () => {
                 <button onClick={() => removeProduct(product._id)}>
                   <IoTrashOutline />
                 </button>
-                <h3>$ {product.price * quantity}</h3>
+                <h3>$ {(product.price * quantity).toFixed(2)}</h3>
               </article>
             );
           })}
@@ -196,7 +215,7 @@ const Cart = () => {
             </h3>
             <p>Shiping & taxes calculated at checkout</p>
           </div>
-          <button>check out</button>
+          <button onClick={checkOut}>check out</button>
         </article>
       </section>
     </CartContainer>

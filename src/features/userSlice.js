@@ -41,6 +41,17 @@ const userSlice = createSlice({
     loading: false,
     error: false,
   },
+  reducers: {
+    pushProduct(state, action) {
+      const newProduct = action.payload.product;
+      const amount = action.payload.amount;
+      state.cart.products.push({ product: newProduct, quantity: amount });
+    },
+    pullProduct(state, action) {
+      const removeProd = action.payload.products;
+      state.cart.products = removeProd;
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(loginUser.pending, (state, action) => {
@@ -68,7 +79,6 @@ const userSlice = createSlice({
         state.userId = action.payload._id;
         state.name = action.payload.name;
         state.email = action.payload.email;
-        
         state.cartId = action.payload.cart;
         state.loading = false;
       })
@@ -81,6 +91,7 @@ const userSlice = createSlice({
       .addCase(logOutUser.fulfilled, (state, action) => {
         state.logged = false;
         state.loading = false;
+        state.cart = [];
       })
       .addCase(userCart.pending, (state, action) => {
         state.loading = true;
@@ -97,4 +108,5 @@ const userSlice = createSlice({
 });
 
 const userReducer = userSlice.reducer;
+export const { pushProduct, pullProduct } = userSlice.actions;
 export default userReducer;

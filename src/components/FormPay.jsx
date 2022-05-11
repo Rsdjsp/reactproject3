@@ -4,6 +4,33 @@ import {
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
+import styled from "styled-components";
+
+const Form = styled.form`
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+
+  & > button {
+    margin: auto;
+    margin-top: 50px;
+    width: 50%;
+    height: 50px;
+    border: none;
+    font-size: 15px;
+    text-transform: uppercase;
+    color: #ffffff;
+    background-color: #e4563c;
+    border-radius: 0.125rem;
+    box-shadow: 0px 11px 11px 0px rgba(50, 50, 50, 0.1);
+    cursor: pointer;
+    :hover {
+      background-color: #f7a293;
+      font-size: 16px;
+    }
+  }
+`;
 
 export default function FormPayment() {
   const [ready, setReady] = useState(false);
@@ -23,17 +50,10 @@ export default function FormPayment() {
   return (
     <>
       {stripe && (
-        <form
-          className=" bg-zinc-100 w-1/2 mx-auto mt-20 p-10 flex flex-col rounded-md"
-          onSubmit={makePayment}
-        >
+        <Form onSubmit={makePayment}>
           <PaymentElement onReady={() => setReady(true)} id="pay" />
-          {ready && (
-            <button className=" bg-indigo-900 hover:bg-indigo-700 text-white py-2 px-20 w-1/2 mx-auto mt-10 rounded-md">
-              submit
-            </button>
-          )}
-        </form>
+          {ready && <button>Pay</button>}
+        </Form>
       )}
     </>
   );
